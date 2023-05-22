@@ -12,7 +12,6 @@ class SearchscraperItem(scrapy.Item):
     keyword = scrapy.Field()
     title = scrapy.Field()
     content = scrapy.Field()
-    writer = scrapy.Field()
     writed_at = scrapy.Field()
     url = scrapy.Field()
     pass

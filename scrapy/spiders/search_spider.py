@@ -13,12 +13,12 @@ class SearchSpiderSpider(scrapy.Spider):
     # 자꾸 m.serch.naver.com으로 redirection 되길래 추가
     handle_httpstatus_list = [302, 403]
 
-    keywords = ['삼성전자','삼성생명','셀트리온','포스코','현대자동차','현대차']
+    keywords = ['셀트리온','삼성생명','현대차','포스코']
     keyword_generator = (keyword for keyword in keywords)
     keyword = next(keyword_generator, None)
     
-    start_date = datetime(2018, 4, 1)
-    end_date = datetime(2023, 5, 16)
+    start_date = datetime(2018, 1, 1)
+    end_date = datetime(2019, 12, 31)
     
 
     URL_FORMAT = 'https://search.naver.com/search.naver?where=news&sm=tab_pge&query={}&sort=0&photo=0&field=0&pd=3&ds={}&de={}&start={}'
@@ -53,7 +53,7 @@ class SearchSpiderSpider(scrapy.Spider):
 
         page = response.meta.pop('page') + 1
         # 200000페이지 넘긴다면 중지
-        if page > 200000:
+        if page > 400:
             self.keyword = next(self.keyword_generator, None)
             if self.keyword is not None:
                 yield scrapy.Request(url=self.start_urls[0], callback=self.start_requests)
@@ -67,10 +67,6 @@ class SearchSpiderSpider(scrapy.Spider):
         item['keyword'] = response.meta['keyword']
         item['title'] = response.xpath('//*[@id="title_area"]/span/text()').extract()
         item['content'] = cleansing(' '.join(response.xpath('//*[@id="dic_area"]//text()').extract()))
-        try:
-            item['writer'] = response.css('.byline_s::text').get().strip().split(' ')[0].split('(')[0]
-        except:
-            item['writer'] = None
         item['writed_at'] = response.css('.media_end_head_info_datestamp_time::attr(data-date-time)').get()
         item['url'] = response.url
         yield item

@@ -7,6 +7,9 @@
 # useful for handling different item types with a single interface
 import csv
 from scrapy.exporters import CsvItemExporter
+import pandas as pd
+import re
+from scrapy.exceptions import DropItem
 
 class SearchscraperPipeline:
     def open_spider(self, spider):
@@ -19,6 +22,15 @@ class SearchscraperPipeline:
 
     def process_item(self, item, spider):
         keyword = item['keyword']
+
+        # 데이터가 비어있을때 제외
+        if any(v is None for v in item.values()):
+            raise DropItem("Missing value in %s" % item)
+
+        # 데이터가 100자 미만일때 제외
+        if len(item.get('content', '')) < 100:
+            raise DropItem("Content length is less than 100 characters")
+
         if keyword not in self.files:
             f = open(f'{keyword}data.csv', 'wb')
             exporter = CsvItemExporter(f)
@@ -26,4 +38,3 @@ class SearchscraperPipeline:
             self.files[keyword] = exporter
         exporter = self.files[keyword]
         exporter.export_item(item)
-        return item
