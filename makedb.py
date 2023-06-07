@@ -22,10 +22,10 @@ CREATE TABLE news(
     news_id INT NOT NULL AUTO_INCREMENT,
     company_id INT,
     company_name VARCHAR(64),
-    title VARCHAR(64),
-    content VARCHAR(64),
+    title text,
+    content mediumtext,
     url VARCHAR(2048),
-    writed_at DATETIME,
+    date DATETIME,
     PRIMARY KEY(news_id),
     FOREIGN KEY (company_id) REFERENCES company (company_id)
 );
