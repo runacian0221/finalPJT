@@ -1,6 +1,7 @@
 import pymysql
 import pandas as pd
 from insert_select_db import Database
+from insert_data_processor_ver1 import DataProcessor
 
 # config.txt에서 설정값을 읽기
 with open("config.txt", "r") as file:
@@ -8,4 +9,8 @@ with open("config.txt", "r") as file:
 
 # Database 객체를 생성
 db = Database(configs)
-db.select_data(table_name='news', start_date='2022-02-01', end_date='2022-02-03', company_ids=[1], file_name='포스코주가데이터2')
+
+# DataProcessor 객체를 생성
+processor = DataProcessor(db)
+
+processor.db.select_data(table_name='report', start_date='2018', end_date='2022', file_name='삼성전자report2018-2023')

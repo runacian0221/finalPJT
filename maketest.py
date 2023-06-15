@@ -68,8 +68,41 @@ CREATE TABLE stock(
     PRIMARY KEY(stock_id),
     FOREIGN KEY (company_id) REFERENCES company (company_id)
 );
-"""
+""",
 
+"""
+CREATE TABLE report(
+    report_id INT NOT NULL AUTO_INCREMENT,
+    company_id INT,
+    company_name VARCHAR(64),
+    date INT,
+    quarter VARCHAR(10),
+    dta FLOAT,
+    cogs FLOAT,
+    ca FLOAT,
+    gp FLOAT,
+    cce FLOAT,
+    tnga FLOAT,
+    cl FLOAT,
+    nca FLOAT,
+    inv FLOAT,
+    fi FLOAT,
+    ncl FLOAT,
+    dctl FLOAT,
+    ip FLOAT,
+    cs FLOAT,
+    oci FLOAT,
+    tl FLOAT,
+    nci FLOAT,
+    tota FLOAT,
+    ata FLOAT,
+    aia FLOAT,
+    ia FLOAT,
+    ir FLOAT,
+    PRIMARY KEY(report_id),
+    FOREIGN KEY (company_id) REFERENCES company (company_id)
+);
+""",
 ]
 
 with connection.cursor() as cursor:
@@ -86,31 +119,8 @@ with connection.cursor() as cursor:
     count = get_table_count(cursor)
     print(f"The number of tables: {count}")
 
-# CREATE TABLE report(
-#     report_id INT NOT NULL AUTO_INCREMENT,
-#     company_id INT,
-#     company_name VARCHAR(64),
-#     sales FLOAT,
-#     operating_income FLOAT,
-#     assets FLOAT,
-#     liabilities FLOAT,
-#     stockholders_equity FLOAT,
-#     capital_stock FLOAT,
-#     cfo FLOAT,
-#     cfi FLOAT,
-#     cff FLOAT,
-#     roe FLOAT,
-#     roa FLOAT,
-#     per FLOAT,
-#     pbr FLOAT,
-#     psr FLOAT,
-#     pcr FLOAT,
-#     dy FLOAT,
-#     date DATETIME,
-#     PRIMARY KEY(report_id),
-#     FOREIGN KEY (company_id) REFERENCES company (company_id)
-# );
 
+# 예측 결과 테이블은 기사, 재무제표, 주가데이터 테이블 3개?
 
 # CREATE TABLE news_prediction(
 #     company_id INT,
