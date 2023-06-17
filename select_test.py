@@ -13,4 +13,4 @@ db = Database(configs)
 # DataProcessor 객체를 생성
 processor = DataProcessor(db)
 
-processor.db.select_data(table_name='report', start_date='2018', end_date='2022', file_name='삼성전자report2018-2023')
+processor.db.select_data(table_name='stock_prediction', start_date='2018-10-10', end_date='2018-10-11', company_ids=[1], file_name='삼성전자stock_prediction2018-2023')

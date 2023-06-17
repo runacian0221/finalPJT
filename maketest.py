@@ -69,7 +69,30 @@ CREATE TABLE stock(
     FOREIGN KEY (company_id) REFERENCES company (company_id)
 );
 """,
-
+# 사업년도 (Fiscal Year, FY)
+# 분기 (Quarter, Q)
+# 유형자산의 처분 (Disposal of Tangible Assets, DTA)
+# 매출원가 (Cost of Goods Sold, COGS)
+# 유동자산 (Current Assets, CA)
+# 매출총이익 (Gross Profit, GP)
+# 현금및현금성자산 (Cash and Cash Equivalents, CCE)
+# 유형자산 (Tangible Assets, TNGA)
+# 유동부채 (Current Liabilities, CL)
+# 비유동자산 (Non-Current Assets, NCA)
+# 재고자산 (Inventory, INV)
+# 금융수익 (Financial Income, FI)
+# 비유동부채 (Non-Current Liabilities, NCL)
+# 이연법인세부채 (Deferred Corporate Tax Liability, DCTL)
+# 이자의 지급 (Interest Payment, IP)
+# 자본금 (Capital Stock, CS)
+# 기타포괄손익 (Other Comprehensive Income, OCI)
+# 부채총계 (Total Liabilities, TL)
+# 비지배지분 (Non-controlling Interest, NCI)
+# 자산총계 (Total Assets, TOTA)
+# 유형자산의 취득 (Acquisition of Tangible Assets, ATA)
+# 무형자산의 취득 (Acquisition of Intangible Assets, AIA)
+# 무형자산 (Intangible Assets, IA)
+# 이자의 수취 (Interest Received, IR)
 """
 CREATE TABLE report(
     report_id INT NOT NULL AUTO_INCREMENT,
@@ -103,6 +126,39 @@ CREATE TABLE report(
     FOREIGN KEY (company_id) REFERENCES company (company_id)
 );
 """,
+
+"""
+CREATE TABLE stock_prediction(
+    stock_prediction_id INT NOT NULL AUTO_INCREMENT,
+    company_id INT,
+    company_name VARCHAR(64),
+    open FLOAT,
+    high FLOAT,
+    low FLOAT,
+    close FLOAT,
+    volume FLOAT,
+    stock_change FLOAT,
+    date DATETIME,
+    ma_5 FLOAT,
+    std FLOAT,
+    upper FLOAT,
+    lower FLOAT,
+    obv FLOAT,
+    ma FLOAT,
+    cci FLOAT,
+    fast_k FLOAT,
+    fast_d FLOAT,
+    roc FLOAT,
+    rsi FLOAT,
+    mfi FLOAT,
+    ma_10 FLOAT,
+    ks_roc FLOAT,
+    ks_fast FLOAT,
+    score FLOAT,
+    PRIMARY KEY(stock_prediction_id),
+    FOREIGN KEY (company_id) REFERENCES company (company_id)
+)
+"""
 ]
 
 with connection.cursor() as cursor:
@@ -135,14 +191,6 @@ with connection.cursor() as cursor:
 #     date DATETIME,
 #     predicted_value ???,
 # ),
-
-# CREATE TABLE stock_prediction(
-#     company_id INT,
-#     company_name VARCHAR(64),
-#     date DATETIME,
-#     predicted_value ???,
-# )
-
 
 
 # """
