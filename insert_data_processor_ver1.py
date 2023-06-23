@@ -48,18 +48,18 @@ class DataProcessor:
     def process_and_insert_report_data(self, csv_file, required_columns, table_name='report'):
         report_df = pd.read_csv('csv/' + csv_file, encoding='UTF-8')
         report_df.fillna(0, inplace=True)
-        report_df.drop(['Unnamed: 0','종목코드', '분기코드'], axis=1, inplace=True)
+        report_df.drop(['기준일자','종목코드','분기코드','PSR','주가코드'], axis=1, inplace=True)
         report_df['기업명'].replace({'현대자동차':'현대차','POSCO홀딩스':'포스코'},inplace=True)
-        new_column_names = ['company_name','date', 'quarter', 'dta', 'cogs', 'ca', 'gp', 'cce', 'tnga', 'cl', 'nca', 'inv', 'fi', 
-                            'ncl', 'dctl', 'ip', 'cs', 'oci', 'tl', 'nci', 'tota', 'ata', 'aia', 'ia', 'ir']
+        new_column_names = ['company_name','dctl', 'ncl', 'nci', 'dta', 'ca', 'aia', 'oci', 'cl', 'cs', 'ata', 'cce', 'inv', 
+                            'cogs', 'tota', 'nca', 'ia', 'ip', 'tnga', 'ir', 'gp', 'tl', 'fi', 'date', 'quarter', 'fq', 'os', 'gp_a']
         column_name_mapping = {old: new for old, new in zip(report_df.columns, new_column_names)}
-        self.process_and_insert_data(report_df, column_name_mapping, csv_file, required_columns, table_name)    
+        self.process_and_insert_data(report_df, column_name_mapping, csv_file, required_columns, table_name)   
 
-    def process_and_insert_prediction_data(self, csv_file, required_columns, table_name='prediction'):
-        prediction_df = pd.read_csv('csv/' + csv_file, encoding='UTF-8')
+    # def process_and_insert_prediction_data(self, csv_file, required_columns, table_name='prediction'):
+    #     prediction_df = pd.read_csv('csv/' + csv_file, encoding='UTF-8')
 
-        prediction_df = self.remove_null_values(prediction_df, csv_file)
-        self.process_and_insert_data(prediction_df, {}, csv_file, required_columns, table_name)
+    #     prediction_df = self.remove_null_values(prediction_df, csv_file)
+    #     self.process_and_insert_data(prediction_df, {}, csv_file, required_columns, table_name)
 
 
     def process_and_insert_stock_prediction_data(self, csv_file, required_columns, table_name='stock_prediction'):

@@ -26,8 +26,8 @@ csv_files = ['cell.csv', 'hyundai.csv', 'samsungelec_2018_2019.csv', 'samsungele
 for csv_file in csv_files:
     processor.process_and_insert_news_data(csv_file, ['company_id','company_name','title','content','url','date'])
     
-processor.process_and_insert_report_data('api_final_result.csv',['company_id','company_name','date', 'quarter', 'dta', 'cogs', 'ca', 'gp', 'cce', 'tnga', 'cl', 'nca', 
-                                                                 'inv', 'fi', 'ncl', 'dctl', 'ip', 'cs', 'oci', 'tl', 'nci', 'tota', 'ata', 'aia', 'ia', 'ir'])
+processor.process_and_insert_report_data('api_result_with_gpa.csv',['company_id', 'company_name','dctl', 'ncl', 'nci', 'dta', 'ca', 'aia', 'oci', 'cl', 'cs', 'ata', 'cce', 'inv', 
+                                                                    'cogs', 'tota', 'nca', 'ia', 'ip', 'tnga', 'ir', 'gp', 'tl', 'fi', 'date', 'quarter', 'fq', 'os', 'gp_a'])
 
 processor.process_and_insert_stock_prediction_data('stock_data_scoring_rf.csv',['company_id', 'company_name', 'date', 'open', 'high', 'low', 'close', 'volume', 'stock_change', 'ma_5', 'std', 'upper',
                                                                                 'lower', 'obv', 'ma', 'cci', 'fast_k', 'fast_d', 'roc', 'rsi', 'mfi', 'ma_10', 'ks_roc', 'ks_fast', 'score'])

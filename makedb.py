@@ -1,12 +1,26 @@
 import pymysql
 
-connection = pymysql.connect(host='13.208.115.44',
-                       port=3306,
-                       user='runa',
-                       password='password',
-                       database='finalpjt',
-                       charset='utf8mb4')
+connection = None
+try:
+    connection = pymysql.connect(host='localhost',
+                           port=3306,
+                           user='root',
+                           password='password',
+                           database='finalpjt',
+                           charset='utf8mb4')
 
+    with connection.cursor() as cursor:
+        sql = "SELECT VERSION()"
+        cursor.execute(sql)
+        result = cursor.fetchone()
+    print("Database version : %s " % result)
+
+except pymysql.err.OperationalError as e:
+    print("Error while connecting to MySQL: {}".format(e))
+
+# change -> stock_change : 예약어라 컬럼명 수정해야됨
+# name -> company_name : 일관성
+# keyword -> company_name : 일관성
 tables = [
 
 """
@@ -54,10 +68,9 @@ CREATE TABLE stock(
     PRIMARY KEY(stock_id),
     FOREIGN KEY (company_id) REFERENCES company (company_id)
 );
-"""
-
-# 사업년도 (Fiscal Year, FY)
-# 분기 (Quarter, Q)
+""",
+# 사업년도 (Fiscal Year, DATE)
+# 분기 (Quarter, Quarter)
 # 유형자산의 처분 (Disposal of Tangible Assets, DTA)
 # 매출원가 (Cost of Goods Sold, COGS)
 # 유동자산 (Current Assets, CA)
@@ -80,55 +93,119 @@ CREATE TABLE stock(
 # 무형자산의 취득 (Acquisition of Intangible Assets, AIA)
 # 무형자산 (Intangible Assets, IA)
 # 이자의 수취 (Interest Received, IR)
-
+# 분기 종가 (Quarterly closing price, FQ)
+# 발행 주식수 (outstanding shares, OS)
 """
 CREATE TABLE report(
     report_id INT NOT NULL AUTO_INCREMENT,
     company_id INT,
-    company_name VARCHAR(64)
-    date INT,
-    quarter VARCHAR(10)
-    dta FLOAT,
-    cogs FLOAT,
-    ca FLOAT,
-    gp FLOAT,
-    cce FLOAT,
-    tnga FLOAT,
-    cl FLOAT,
-    nca FLOAT,
-    inv FLOAT,
-    fi FLOAT,
-    ncl FLOAT,
-    dctl FLOAT,
-    ip FLOAT,
-    cs FLOAT,
-    oci FLOAT,
-    tl FLOAT,
-    nci FLOAT,
-    tota FLOAT,
-    ata FLOAT,
-    aia FLOAT,
-    ia FLOAT,
-    ir FLOAT,
+    company_name VARCHAR(64),
+    dctl FLOAT, 
+    ncl FLOAT, 
+    nci FLOAT, 
+    dta FLOAT, 
+    ca FLOAT, 
+    aia FLOAT, 
+    oci FLOAT, 
+    cl FLOAT, 
+    cs FLOAT, 
+    ata FLOAT, 
+    cce FLOAT, 
+    inv FLOAT, 
+    cogs FLOAT, 
+    tota FLOAT, 
+    nca FLOAT, 
+    ia FLOAT, 
+    ip FLOAT, 
+    tnga FLOAT, 
+    ir FLOAT, 
+    gp FLOAT, 
+    tl FLOAT, 
+    fi FLOAT, 
+    date INT, 
+    quarter VARCHAR(10), 
+    fq FLOAT, 
+    os FLOAT, 
+    gp_a FLOAT,
     PRIMARY KEY(report_id),
-    FOREIGN KEY (company_id) REFERENCE company (company_id)
+    FOREIGN KEY (company_id) REFERENCES company (company_id)
 );
-""",
+"""
 
 """
-CREATE TABLE prediction(
-    prediction_id INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE stock_prediction(
+    stock_prediction_id INT NOT NULL AUTO_INCREMENT,
     company_id INT,
-    company_name VARCHAR(64)
-    prediction_price FLOAT,
+    company_name VARCHAR(64),
+    open FLOAT,
+    high FLOAT,
+    low FLOAT,
+    close FLOAT,
+    volume FLOAT,
+    stock_change FLOAT,
     date DATETIME,
-    PRIMARY KEY (prediction_id),
-    FOREIGN KEY (company_id) REFERENCE company (company_id)
+    ma_5 FLOAT,
+    std FLOAT,
+    upper FLOAT,
+    lower FLOAT,
+    obv FLOAT,
+    ma FLOAT,
+    cci FLOAT,
+    fast_k FLOAT,
+    fast_d FLOAT,
+    roc FLOAT,
+    rsi FLOAT,
+    mfi FLOAT,
+    ma_10 FLOAT,
+    ks_roc FLOAT,
+    ks_fast FLOAT,
+    score FLOAT,
+    PRIMARY KEY(stock_prediction_id),
+    FOREIGN KEY (company_id) REFERENCES company (company_id)
 )
-""",
+"""
 ]
 
 with connection.cursor() as cursor:
-    print(cursor.execute('describe news')) #테이블 개수 보여줌
-    print(cursor.fetchall())
-    
+    for table_creation_sql in tables:
+        cursor.execute(table_creation_sql)
+    connection.commit()  # 모든 테이블 생성 쿼리를 실행한 후에 commit
+
+def get_table_count(cursor):
+    cursor.execute("SHOW TABLES")
+    tables = cursor.fetchall()
+    return len(tables)
+
+with connection.cursor() as cursor:
+    count = get_table_count(cursor)
+    print(f"The number of tables: {count}")
+
+
+# 예측 결과 테이블은 기사, 재무제표, 주가데이터 테이블 3개?
+
+# CREATE TABLE news_prediction(
+#     company_id INT,
+#     company_name VARCHAR(64),
+#     date DATETIME,
+#     predicted_value ???,
+# ),
+
+# CREATE TABLE report_prediction(
+#     company_id INT,
+#     company_name VARCHAR(64),
+#     date DATETIME,
+#     predicted_value ???,
+# ),
+
+
+# """
+# CREATE TABLE prediction(
+#     prediction_id INT NOT NULL AUTO_INCREMENT,
+#     company_id INT,
+#     company_name VARCHAR(64),
+#     prediction_price FLOAT,
+#     date DATETIME,
+#     PRIMARY KEY (prediction_id),
+#     FOREIGN KEY (company_id) REFERENCES company (company_id)
+# )
+# """,
