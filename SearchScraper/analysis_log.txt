@@ -1,0 +1,20 @@
+데이터베이스 연결 성공
+<class 'pandas.core.frame.DataFrame'>
+Index: 0 entries
+Data columns (total 8 columns):
+ #   Column        Non-Null Count  Dtype 
+---  ------        --------------  ----- 
+ 0   company_id    0 non-null      object
+ 1   company_name  0 non-null      object
+ 2   title         0 non-null      object
+ 3   content       0 non-null      object
+ 4   url           0 non-null      object
+ 5   date          0 non-null      object
+ 6   sentiment     0 non-null      object
+ 7   score         0 non-null      object
+dtypes: object(8)
+memory usage: 0.0+ bytes
+None
+Empty DataFrame
+Columns: [company_id, company_name, title, content, url, date, sentiment, score]
+Index: []
